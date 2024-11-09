@@ -1,0 +1,81 @@
+{
+  "name": "node-api",
+  "version": "2.0.0",
+  "description": "Node API is the backend service for node-web. It is also a template for Node API applications developed at KTH.",
+  "private": true,
+  "scripts": {
+    "lint": "eslint \"**/*.js\" --quiet",
+    "lint-v": "eslint \"**/*.js\" ",
+    "prettier:all": "prettier --write \"**/*.js\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:unit-in-docker": "docker build --progress plain -t node-api . && bash -c 'LOCAL_IMAGE_ID=node-api docker-compose -f docker-compose-unit-tests.yml* up --abort-on-container-exit --build --remove-orphans'",
+    "test:integration": "cd test/integration && bash -c 'INTEGRATION_TEST_BASEURL=http://localhost:3001/api/node ./all-tests.sh'",
+    "test:integration-in-docker": "docker build --progress plain -t node-api . && bash -c 'LOCAL_IMAGE_ID=node-api SUCCESS_DELAY=5000 docker-compose -f docker-compose-integration-tests.yml* up --abort-on-container-exit --build --remove-orphans'",
+    "test:coverage": "jest --coverage",
+    "validate:swagger": "node ./test/swagger-validate.js",
+    "validate:swagger-watch": "nodemon --watch swagger.json ./test/swagger-validate.js",
+    "start": "bash -c '/wait; cat /KTH_NODEJS; NODE_ENV=production node app.js'",
+    "start-dev": "bash -c 'NODE_ENV=development nodemon app.js'",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@hokify/agenda": "^6.3.0",
+    "@kth/appinsights": "^0.4.0",
+    "@kth/log": "^4.0.7",
+    "@kth/mongo": "^4.0.15",
+    "@kth/monitor": "^4.3.1",
+    "body-parser": "^1.20.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "kth-node-access-log": "^0.2.10",
+    "kth-node-api-common": "^1.0.10",
+    "kth-node-api-key-strategy": "^2.0.3",
+    "kth-node-configuration": "^2.1.0",
+    "kth-node-express-routing": "^2.2.0",
+    "mongoose": "^7.8.2",
+    "passport": "^0.7.0",
+    "swagger-ui-dist": "^5.18.2"
+  },
+  "devDependencies": {
+    "@kth/eslint-config-kth": "^3.5.0",
+    "@types/jest": "^29.5.14",
+    "eslint": "^8.57.1",
+    "husky": "^9.1.6",
+    "jest": "^29.7.0",
+    "jest-extended": "^4.0.2",
+    "jest-sonar-reporter": "^2.0.0",
+    "lint-staged": "^15.2.10",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.3.3",
+    "swagger-parser": "^10.0.3"
+  },
+  "// (prettier)": "configuration version 2020-06-15 - might also reside in .prettierrc.json",
+  "prettier": {
+    "arrowParens": "avoid",
+    "printWidth": 120,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "// (jest)": "configuration version 2020-06-15 (API+NPM) - might also reside as module.exports in jest.config.js",
+  "jest": {
+    "clearMocks": true,
+    "notifyMode": "failure-change",
+    "setupFilesAfterEnv": [
+      "jest-extended/all"
+    ],
+    "testEnvironment": "node",
+    "verbose": true,
+    "collectCoverageFrom": [
+      "server/**/*.js"
+    ],
+    "coverageDirectory": "./test/coverage",
+    "testResultsProcessor": "jest-sonar-reporter"
+  },
+  "jestSonar": {
+    "reportPath": "./test/reports",
+    "reportFile": "test-reporter.xml"
+  }
+}
