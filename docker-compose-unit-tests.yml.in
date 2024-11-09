@@ -1,0 +1,22 @@
+version: '3.6'
+
+#
+# Test by:
+#   npm run test:unit-in-docker
+#
+
+services:
+  api:
+    image: $LOCAL_IMAGE_ID
+    #
+    # Mount the directory that may contain some test-files:
+    # (The volume mount is done at startup and does not affect the image itself.)
+    volumes:
+      - ./test:/application/test
+      - ./__mocks__:/application/__mocks__
+    #
+    # Override CMD in Dockerfile and instead run this in the container:
+    command:
+      - 'sh'
+      - '-c'
+      - 'apk add --no-progress --no-cache python make g++ util-linux && npm ci && npm test'
