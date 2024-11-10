@@ -39,13 +39,21 @@ const { getPaths } = require('kth-node-express-routing')
 const customPaths = {
   api: {
     ...getPaths().api, // Includes existing paths
-    putDataById: {
-      method: 'PUT',
-      path: '/api/sample/:id',
+    getPersonById: {
+      method: 'GET',
+      path: '/api/person/:id',
     },
-    deleteDataById: {
+    postPersonById: {
+      method: 'POST',
+      path: '/api/person/:id',
+    },
+    putPersonById: {
       method: 'PUT',
-      path: '/api/sample/:id',
+      path: '/api/person/:id',
+    },
+    deletePersonById: {
+      method: 'DELETE',
+      path: '/api/person/:id',
     },
   },
 }
@@ -146,10 +154,10 @@ const paths = getPaths() // Includes now both original and custom paths
 
 // API endpoints
 apiRoute.register(paths.api.checkAPIkey, System.checkAPIKey)
-apiRoute.register(paths.api.getDataById, Sample.getData)
-apiRoute.register(paths.api.postDataById, Sample.postData)
-apiRoute.register(paths.api.putDataById, Sample.putData) // Custom PUT path
-apiRoute.register(paths.api.deleteDataById, Sample.deleteData) // Custom DELETE path
+apiRoute.register(paths.api.getPersonById, Sample.getPerson)
+apiRoute.register(paths.api.postPersonById, Sample.postPerson)
+apiRoute.register(paths.api.putPersonById, Sample.putPerson) // Custom PUT path
+apiRoute.register(paths.api.deletePersonById, Sample.deletePerson) // Custom DELETE path
 server.use('/', apiRoute.getRouter())
 
 // Catch not found and errors

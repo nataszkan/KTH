@@ -9,19 +9,19 @@ const { Sample } = require('../models')
  * @param {object} res
  * @param {Function} next
  */
-async function getData(req, res, next) {
+async function getPerson(req, res, next) {
   try {
-    log.debug({ req, res }, 'Enter getData')
+    log.debug({ req, res }, 'Enter getPerson')
     let doc = {}
     doc = await Sample.findById(req.params.id)
 
     if (!doc) {
       return res.status(404).json({ message: 'Document not found' })
     }
-    log.debug({ req, res }, 'Leave getData')
+    log.debug({ req, res }, 'Leave getPerson')
     return res.json({ id: doc._id, firstName: doc.firstName, lastName: doc.lastName })
   } catch (err) {
-    log.error({ err }, 'Error in getData')
+    log.error({ err }, 'Error in getPerson')
     return next(err)
   }
 }
@@ -31,9 +31,9 @@ async function getData(req, res, next) {
  * @param {object} res
  * @param {Function} next
  */
-async function postData(req, res, next) {
+async function postPerson(req, res, next) {
   try {
-    log.debug({ req, res }, 'Enter postData')
+    log.debug({ req, res }, 'Enter postPerson')
     let doc = await Sample.findById(req.params.id)
 
     if (!doc) {
@@ -53,7 +53,7 @@ async function postData(req, res, next) {
     log.debug({ req, res }, 'Document saved successfully')
     return res.json({ id: doc._id, firstName: doc.firstName, lastName: doc.lastName })
   } catch (err) {
-    log.error({ err }, 'Error in postData')
+    log.error({ err }, 'Error in postPerson')
     return next(err)
   }
 }
@@ -64,9 +64,9 @@ async function postData(req, res, next) {
  * @param {Function} next
  */
 
-async function putData(req, res, next) {
+async function putPerson(req, res, next) {
   try {
-    log.debug({ req, res }, 'Enter putData')
+    log.debug({ req, res }, 'Enter putPerson ')
     const doc = await Sample.findById(req.params.id)
 
     if (!doc) {
@@ -81,7 +81,7 @@ async function putData(req, res, next) {
     log.info({ doc }, 'Document saved successfully')
     return res.json({ id: doc._id, firstName: doc.firstName, lastName: doc.lastName })
   } catch (err) {
-    log.error({ err }, 'Error in putData')
+    log.error({ err }, 'Error in putPerson ')
     return next(err)
   }
 }
@@ -91,9 +91,9 @@ async function putData(req, res, next) {
  * @param {object} res
  * @param {Function} next
  */
-async function deleteData(req, res, next) {
+async function deletePerson(req, res, next) {
   try {
-    log.debug({ req }, 'Enter deleteData')
+    log.debug({ req }, 'Enter deletePerson')
     const doc = await Sample.findByIdAndDelete(req.params.id)
 
     if (!doc) {
@@ -104,14 +104,14 @@ async function deleteData(req, res, next) {
     log.info({ id: req.params.id }, 'Document deleted')
     return res.status(204).json({ message: 'Document deleted' })
   } catch (err) {
-    log.error({ err }, 'Error in deleteData')
+    log.error({ err }, 'Error in deletePerson')
     return next(err)
   }
 }
 
 module.exports = {
-  getData,
-  postData,
-  putData,
-  deleteData,
+  getPerson,
+  postPerson,
+  putPerson,
+  deletePerson,
 }
