@@ -31,6 +31,27 @@ const path = require('path')
 const AppRouter = require('kth-node-express-routing').PageRouter
 const { getPaths } = require('kth-node-express-routing')
 
+/* ***********************
+ * ******* ADD CUSTOM PATHS *******
+ * ***********************
+ */
+
+const customPaths = {
+  api: {
+    ...getPaths().api, // Includes existing paths
+    putDataById: {
+      method: 'PUT',
+      path: '/api/sample/:id',
+    },
+    deleteDataById: {
+      method: 'PUT',
+      path: '/api/sample/:id',
+    },
+  },
+}
+
+module.exports = customPaths
+
 // Expose the server and paths
 server.locals.secret = new Map()
 module.exports = server
@@ -121,14 +142,14 @@ const { Sample } = require('./controllers')
 const { ApiRouter } = require('kth-node-express-routing')
 
 const apiRoute = ApiRouter(authByApiKey)
-const paths = getPaths()
+const paths = getPaths() // Includes now both original and custom paths
 
 // API endpoints
 apiRoute.register(paths.api.checkAPIkey, System.checkAPIKey)
 apiRoute.register(paths.api.getDataById, Sample.getData)
 apiRoute.register(paths.api.postDataById, Sample.postData)
-apiRoute.register(paths.api.putDataById, Sample.putData)
-apiRoute.register(paths.api.deleteDataById, Sample.deleteData)
+apiRoute.register(paths.api.putDataById, Sample.putData) // Custom PUT path
+apiRoute.register(paths.api.deleteDataById, Sample.deleteData) // Custom DELETE path
 server.use('/', apiRoute.getRouter())
 
 // Catch not found and errors
