@@ -16,11 +16,12 @@ async function getData(req, res, next) {
     doc = await Sample.findById(req.params.id)
 
     if (!doc) {
-      return res.status(404).json({ message: 'document not found' })
+      return res.status(404).json({ message: 'Document not found' })
     }
     log.debug({ req, res }, 'Leave getData')
-    return res.json({ id: doc._id, name: doc.name })
+    return res.json({ id: doc._id, firstName: doc.firstName, lastName: doc.lastName })
   } catch (err) {
+    log.error({ err }, 'Error in getData')
     return next(err)
   }
 }
@@ -32,22 +33,27 @@ async function getData(req, res, next) {
  */
 async function postData(req, res, next) {
   try {
-    log.debug({ req, res }, 'PostData')
+    log.debug({ req, res }, 'Enter postData')
     let doc = await Sample.findById(req.params.id)
 
     if (!doc) {
       doc = new Sample({
         _id: req.params.id,
-        name: req.body.name,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
       })
+      log.info({ doc }, 'New document created')
     } else {
-      doc.name = req.body.name
+      doc.firstName = req.body.firstName
+      doc.lastName = req.body.lastName
+      log.info({ doc }, 'Document updated')
     }
 
     await doc.save()
     log.debug({ req, res })
-    res.json({ id: doc._id, name: doc.name })
+    res.json({ id: doc._id, firstName: doc.firstName, lastName: doc.lastName })
   } catch (err) {
+    log.error({ err }, 'Error in postData')
     next(err)
   }
 }
