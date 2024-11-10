@@ -50,15 +50,68 @@ async function postData(req, res, next) {
     }
 
     await doc.save()
-    log.debug({ req, res })
-    res.json({ id: doc._id, firstName: doc.firstName, lastName: doc.lastName })
+    log.debug({ req, res }, 'Document saved successfully')
+    return res.json({ id: doc._id, firstName: doc.firstName, lastName: doc.lastName })
   } catch (err) {
     log.error({ err }, 'Error in postData')
-    next(err)
+    return next(err)
+  }
+}
+
+/**
+ * @param {object} req
+ * @param {object} res
+ * @param {Function} next
+ */
+
+async function putData(req, res, next) {
+  try {
+    log.debug({ req, res }, 'Enter putData')
+    const doc = await Sample.findById(req.params.id)
+
+    if (!doc) {
+      log.info({ id: req.params.id }, 'Document not found')
+      return res.status(404).json({ message: 'Document not found' })
+    }
+
+    doc.firstName = req.body.firstName || doc.firstName
+    doc.lastName = req.body.lastName || doc.lastName
+    await doc.save()
+
+    log.info({ doc }, 'Document saved successfully')
+    return res.json({ id: doc._id, firstName: doc.firstName, lastName: doc.lastName })
+  } catch (err) {
+    log.error({ err }, 'Error in putData')
+    return next(err)
+  }
+}
+
+/**
+ * @param {object} req
+ * @param {object} res
+ * @param {Function} next
+ */
+async function deleteData(req, res, next) {
+  try {
+    log.debug({ req }, 'Enter deleteData')
+    const doc = await Sample.findByIdAndDelete(req.params.id)
+
+    if (!doc) {
+      log.info({ id: req.params.id }, 'Document not found')
+      return res.status(404).json({ message: 'Document not found' })
+    }
+
+    log.info({ id: req.params.id }, 'Document deleted')
+    return res.status(204).json({ message: 'Document deleted' })
+  } catch (err) {
+    log.error({ err }, 'Error in deleteData')
+    return next(err)
   }
 }
 
 module.exports = {
   getData,
   postData,
+  putData,
+  deleteData,
 }
