@@ -38,27 +38,38 @@ const { getPaths } = require('kth-node-express-routing')
 
 const customPaths = {
   api: {
-    ...getPaths().api, // Includes existing paths
     getPersonById: {
-      method: 'GET',
-      path: '/api/person/:id',
+      uri: '/v1/person/{id}',
+      method: 'get',
+      openid: { scope_required: true, scopes: { api_key: ['read'] } },
     },
-    postPersonById: {
-      method: 'POST',
-      path: '/api/person/:id',
+    postPerson: {
+      uri: '/v1/person/',
+      method: 'post',
+      openid: { scope_required: true, scopes: { api_key: ['write'] } },
     },
     putPersonById: {
-      method: 'PUT',
-      path: '/api/person/:id',
+      uri: '/v1/person/{id}',
+      method: 'put',
+      openid: { scope_required: true, scopes: { api_key: ['write'] } },
     },
     deletePersonById: {
-      method: 'DELETE',
-      path: '/api/person/:id',
+      uri: '/v1/person/{id}',
+      method: 'delete',
+      openid: { scope_required: true, scopes: { api_key: ['write'] } },
+    },
+    checkAPIkey: {
+      uri: '/_checkAPIkey',
+      method: 'get',
+      openid: { scope_required: true, scopes: { api_key: ['read'] } },
     },
   },
 }
+// Merge getPaths with customPaths
+const paths = { api: { ...getPaths().api, ...customPaths.api } }
 
-module.exports = customPaths
+// Ensure paths are exported
+module.exports.getPaths = () => paths
 
 // Expose the server and paths
 server.locals.secret = new Map()
@@ -150,14 +161,13 @@ const { Sample } = require('./controllers')
 const { ApiRouter } = require('kth-node-express-routing')
 
 const apiRoute = ApiRouter(authByApiKey)
-const paths = getPaths() // Includes now both original and custom paths
 
 // API endpoints
 apiRoute.register(paths.api.checkAPIkey, System.checkAPIKey)
 apiRoute.register(paths.api.getPersonById, Sample.getPerson)
-apiRoute.register(paths.api.postPersonById, Sample.postPerson)
-apiRoute.register(paths.api.putPersonById, Sample.putPerson) // Custom PUT path
-apiRoute.register(paths.api.deletePersonById, Sample.deletePerson) // Custom DELETE path
+apiRoute.register(paths.api.postPerson, Sample.postPerson)
+apiRoute.register(paths.api.putPersonById, Sample.putPerson)
+apiRoute.register(paths.api.deletePersonById, Sample.deletePerson)
 server.use('/', apiRoute.getRouter())
 
 // Catch not found and errors
