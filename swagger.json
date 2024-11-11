@@ -121,86 +121,86 @@
             "api_key": ["write"]
           }
         ]
+      },
+      "put": {
+        "tags": ["person"],
+        "operationId": "getPersonById",
+        "summary": "Update Person with ID",
+        "description": "Updates the person-object with the given ID.\n\n_(Sample.getPerson)_\n\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/PersonId"
+          },
+          {
+            "$ref": "#/parameters/PersonObject"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested person",
+            "schema": {
+              "$ref": "#/definitions/PersonObject"
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "This endpoint is secured - **credentials are missing or invalid**."
+          },
+          "404": {
+            "description": "No person found for the given ID",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "default": {
+            "description": "Unexpected response - internal error"
+          }
+        },
+        "security": [
+          {
+            "api_key": ["write"]
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["person"],
+        "operationId": "deletePersonData",
+        "summary": "Delete person data",
+        "description": "Deletes the person object with the given ID.\n\n_(Sample.deletePerson)_",
+        "parameters": [
+          {
+            "$ref": "#/parameters/PersonId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Person deleted successfully"
+          },
+          "401": {
+            "description": "This endpoint is secured - **credentials are missing or invalid**."
+          },
+          "404": {
+            "description": "No person found for the given ID",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "default": {
+            "description": "Unexpected response - internal error"
+          }
+        },
+        "security": [
+          {
+            "api_key": ["write"]
+          }
+        ]
       }
     }
-  },
-  "put": {
-    "tags": ["person"],
-    "operationId": "getPersonById",
-    "summary": "Update Person with ID",
-    "description": "Updates the person-object with the given ID.\n\n_(Sample.getPerson)_\n\n",
-    "parameters": [
-      {
-        "$ref": "#/parameters/PersonId"
-      },
-      {
-        "$ref": "#/parameters/PersonObject"
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "The requested person",
-        "schema": {
-          "$ref": "#/definitions/PersonObject"
-        }
-      },
-      "400": {
-        "description": "Invalid request",
-        "schema": {
-          "$ref": "#/definitions/ErrorResponse"
-        }
-      },
-      "401": {
-        "description": "This endpoint is secured - **credentials are missing or invalid**."
-      },
-      "404": {
-        "description": "No person found for the given ID",
-        "schema": {
-          "$ref": "#/definitions/ErrorResponse"
-        }
-      },
-      "default": {
-        "description": "Unexpected response - internal error"
-      }
-    },
-    "security": [
-      {
-        "api_key": ["write"]
-      }
-    ]
-  },
-  "delete": {
-    "tags": ["person"],
-    "operationId": "deletePersonData",
-    "summary": "Delete person data",
-    "description": "Deletes the person object with the given ID.\n\n_(Sample.deletePerson)_",
-    "parameters": [
-      {
-        "$ref": "#/parameters/PersonId"
-      }
-    ],
-    "responses": {
-      "204": {
-        "description": "Person deleted successfully"
-      },
-      "401": {
-        "description": "This endpoint is secured - **credentials are missing or invalid**."
-      },
-      "404": {
-        "description": "No person found for the given ID",
-        "schema": {
-          "$ref": "#/definitions/ErrorResponse"
-        }
-      },
-      "default": {
-        "description": "Unexpected response - internal error"
-      }
-    },
-    "security": [
-      {
-        "api_key": ["write"]
-      }
-    ]
   },
   "securityDefinitions": {
     "api_key": {
